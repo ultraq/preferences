@@ -10,10 +10,10 @@ import java.util.prefs.BackingStoreException;
  *   <li>import/export using the underlying XML file format</li>
  * </ul>
  * This is only an alternate method for accessing preferences, and does not
- * prevent one from utilizing the Preferences API in the normal manner.  If
- * another Preferences API implementation is higher-up on the SPI classloading
- * phase, this class will use that instead of the one that comes with this
- * package.
+ * prevent one from utilizing the Preferences API in the normal manner, nor does
+ * its use tie one down to my preferences implementations - if another
+ * implementation is 'higher up' in the classloading chain, then that
+ * implementation will be and will actually back the calls made to this class.
  * 
  * @author Emanuel Rabina
  */
@@ -23,9 +23,8 @@ public class Preferences {
 	private static final java.util.prefs.Preferences userpreferences;
 
 	static {
-		PreferencesFactory pf = new PreferencesFactory();
-		systempreferences = pf.systemRoot();
-		userpreferences   = pf.userRoot();
+		systempreferences = java.util.prefs.Preferences.systemRoot();
+		userpreferences   = java.util.prefs.Preferences.userRoot();
 	}
 
 	/**

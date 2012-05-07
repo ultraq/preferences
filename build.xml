@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================== -->
+<!-- Scanner's Ant - Generate JAXB classes for Preferences -->
+<!-- ===================================================== -->
+
+<project name="Common - Preferences" default="build">
+	<description>
+		Generates the JAXB classes from the XML schema files in this project.
+	</description>
+
+	<!-- Imports and properties -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${user.libraries}/jaxb/lib" includes="jaxb-xjc.jar"/>
+		</classpath>
+	</taskdef>
+
+	<property name="source-dir" location="Source"/>
+	<property name="schema-dir" location="Schema"/>
+
+	<!-- Generate JAXB classes -->
+	<target name="generate">
+		<echo message="Cleaning build directory..."/>
+		<delete includeemptydirs="true">
+			<fileset dir="${source-dir}">
+				<include name="**/ObjectFactory.java"/>
+				<include name="**/package-info.java"/>
+				<include name="**/XML*"/>
+			</fileset>
+		</delete>
+
+		<echo message="Generating classes from XML..."/>
+		<xjc schema="${schema-dir}/Preferences.xsd" destdir="${source-dir}" extension="true"/>
+
+		<replace file="${source-dir}/nz/net/ultraq/xml/preferences/xml/XMLPreferences.java">
+<replacetoken><![CDATA[
+    protected String _package;
+]]></replacetoken>
+<replacevalue><![CDATA[
+    protected String _package;
+
+    /**
+     * Compares preferences nodes.  Nodes are equal if they share the same
+     * 'package' name.
+     * 
+     * @return <tt>true</tt> if both objects share the same package name,
+     * 		   <tt>false</tt> otherwise.
+     */
+    public boolean equals(Object o) {
+
+    	if (o instanceof XMLPreferences) {
+    		XMLPreferences other = (XMLPreferences)o;
+    		return _package.equals(other._package);
+    	}
+    	return false;
+    }
+]]></replacevalue>
+		</replace>
+	</target>
+
+	<target name="build" depends="jar, source"/>
+
+	<!-- Create XML Preferences JAR file -->
+	<target name="jar">
+		<echo message="Building XML Preferences JAR file..."/>
+		<jar destfile="xml-preferences.jar" basedir="Classes" manifest="META-INF/MANIFEST.MF"/>
+	</target>
+
+	<!-- Create XML Preferences source file -->
+	<target name="source">
+		<echo message="Building XML Preferences source archive..."/>
+		<zip destfile="xml-preferences.zip" basedir="Java"/>
+	</target>
+
+</project>

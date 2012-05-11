@@ -14,7 +14,6 @@
 	<target name="jar">
 		<jar basedir="Classes" destfile="${project.shortname}-${project.version}.jar">
 			<manifest>
-				<attribute name="Class-Path" value="jaxb-api.jar jaxb-impl.jar activation.jar jsr173_1.0_api.jar"/>
 				<attribute name="Implementation-Title" value="${project.name}"/>
 				<attribute name="Implementation-Version" value="${project.version}"/>
 				<attribute name="Implementation-Vendor" value="Emanuel Rabina"/>

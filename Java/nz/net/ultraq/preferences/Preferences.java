@@ -44,7 +44,7 @@ public class Preferences {
 
 		java.util.prefs.Preferences prefnode = userpreferences.node(
 				userprefkey.getClass().getPackage().getName());
-		prefnode.remove(userprefkey.getKey());
+		prefnode.remove(userprefkey.name());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Preferences {
 
 		java.util.prefs.Preferences prefnode = systempreferences.node(
 				sysprefkey.getClass().getPackage().getName());
-		prefnode.remove(sysprefkey.getKey());
+		prefnode.remove(sysprefkey.name());
 	}
 
 	/**
@@ -133,6 +133,33 @@ public class Preferences {
 	}
 
 	/**
+	 * Returns a preference value.
+	 * 
+	 * @param <T> Value type.
+	 * @param rootprefs One of the system or user preference root nodes.
+	 * @param prefkey Preferences key.
+	 * @param type	  Return type.
+	 * @return The value of the preference, or the default if it doesn't exist
+	 * 		   in the preferences.
+	 */
+	@SuppressWarnings("unchecked")
+	private static <T> T get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Class<T> type) {
+
+		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
+		String name = prefkey.name();
+		T value = (T)prefkey.defaultValue();
+
+		if (type == Integer.TYPE) {
+			value = (T)new Integer(prefnode.getInt(name, (Integer)value));
+		}
+		else if (type == String.class) {
+			value = (T)prefnode.get(name, (String)value);
+		}
+
+		return value;
+	}
+
+	/**
 	 * Returns a user preference value.
 	 * 
 	 * @param userprefkey User preferences key.
@@ -141,9 +168,7 @@ public class Preferences {
 	 */
 	public static String get(UserPreferencesKey userprefkey) {
 
-		java.util.prefs.Preferences prefnode = userpreferences.node(
-				userprefkey.getClass().getPackage().getName());
-		return prefnode.get(userprefkey.getKey(), userprefkey.getDefault());
+		return get(userpreferences, userprefkey, String.class);
 	}
 
 	/**
@@ -155,9 +180,37 @@ public class Preferences {
 	 */
 	public static String get(SystemPreferencesKey sysprefkey) {
 
-		java.util.prefs.Preferences prefnode = systempreferences.node(
-				sysprefkey.getClass().getPackage().getName());
-		return prefnode.get(sysprefkey.getKey(), sysprefkey.getDefault());
+		return get(systempreferences, sysprefkey, String.class);
+	}
+
+	/**
+	 * Returns a preference value.
+	 * 
+	 * @param userprefkey User preferences key.
+	 * @return The value of the user preference, or the default if it doesn't
+	 * 		   exist in the preferences.
+	 */
+	public static int getInt(UserPreferencesKey userprefkey) {
+
+		return get(userpreferences, userprefkey, Integer.TYPE);
+	}
+
+	/**
+	 * Return whether or not the node for this key class exists.
+	 * 
+	 * @param keyclass
+	 * @return <tt>true</tt> if the node housing the given key class exists.
+	 * @throws PreferencesException If there was some error in communicating
+	 * 		   with the backing store.
+	 */
+	public static boolean nodeExists(Class<? extends PreferencesKey> keyclass) throws PreferencesException {
+
+		try {
+			return systempreferences.nodeExists(keyclass.getPackage().getName());
+		}
+		catch (BackingStoreException ex) {
+			throw new PreferencesException(ex.getMessage(), ex);
+		}
 	}
 
 	/**
@@ -170,7 +223,7 @@ public class Preferences {
 
 		java.util.prefs.Preferences prefnode = userpreferences.node(
 				userprefkey.getClass().getPackage().getName());
-		prefnode.put(userprefkey.getKey(), value);
+		prefnode.put(userprefkey.name(), value);
 	}
 
 	/**
@@ -183,6 +236,6 @@ public class Preferences {
 
 		java.util.prefs.Preferences prefnode = systempreferences.node(
 				sysprefkey.getClass().getPackage().getName());
-		prefnode.put(sysprefkey.getKey(), value);
+		prefnode.put(sysprefkey.name(), value);
 	}
 }

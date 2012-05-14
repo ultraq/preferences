@@ -15,12 +15,12 @@ interface PreferencesKey {
 	 * 
 	 * @return Default setting value.
 	 */
-	public String getDefault();
+	public Object defaultValue();
 
 	/**
 	 * Returns the name of the setting/parameter to retrieve.
 	 * 
 	 * @return <tt>String</tt> of the key used to map the setting to.
 	 */
-	public String getKey();
+	public String name();
 }

@@ -14,7 +14,7 @@ public class PreferencesException extends RuntimeException {
 	 *
 	 * @param message Additional error message.
 	 */
-	protected PreferencesException(String message) {
+	PreferencesException(String message) {
 
 		super(message);
 	}
@@ -25,7 +25,7 @@ public class PreferencesException extends RuntimeException {
 	 * @param message Error message to accompany the exception.
 	 * @param cause The cause for this exception to be raised.
 	 */
-	protected PreferencesException(String message, Exception cause) {
+	PreferencesException(String message, Exception cause) {
 
 		super(message, cause);
 	}

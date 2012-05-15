@@ -3,11 +3,12 @@ package nz.net.ultraq.preferences;
 
 /**
  * Interface outlining the format of anything that wants to retrieve a
- * preference from the {@link Preferences} class.
+ * preference from the {@link Preferences} class.  Used to make type-safe
+ * preferences retrieval using enums.
  * 
  * @author Emanuel Rabina
  */
-interface PreferencesKey {
+public interface PreferencesKey {
 
 	/**
 	 * Returns the default setting value to use if the setting key does not

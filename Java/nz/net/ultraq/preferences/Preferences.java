@@ -4,14 +4,11 @@ package nz.net.ultraq.preferences;
 import java.util.prefs.BackingStoreException;
 
 /**
- * Alternate entrypoint to the Preferences API.  Customized to do the following:
- * <ul>
- *   <li>enforce preference retrieval/storage with interfaces/enums</li>
- *   <li>import/export using the underlying XML file format</li>
- * </ul>
+ * Alternate entrypoint to the Preferences API.
+ * <p>
  * This is only an alternate method for accessing preferences, and does not
  * prevent one from utilizing the Preferences API in the normal manner, nor does
- * its use tie one down to my preferences implementations - if another
+ * its use tie one down to my XML preferences implementation - if another
  * implementation is 'higher up' in the classloading chain, then that
  * implementation will be and will actually back the calls made to this class.
  * 
@@ -35,66 +32,33 @@ public class Preferences {
 	}
 
 	/**
-	 * Clears a single user preference.  This method is analogous to a 'reset
-	 * default' function for the given preference.
+	 * Clears a stored preference, allowing future calls for the preference to
+	 * revert to its default value.
 	 * 
-	 * @param userprefkey User preferences key to have it's value cleared.
+	 * @param prefkey Preferences key to have it's value cleared.
 	 */
-	public static void clear(UserPreferencesKey userprefkey) {
+	public static void clear(PreferencesKey prefkey) {
 
-		java.util.prefs.Preferences prefnode = userpreferences.node(
-				userprefkey.getClass().getPackage().getName());
-		prefnode.remove(userprefkey.name());
+		java.util.prefs.Preferences prefnode =
+				(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
+				.node(prefkey.getClass().getPackage().getName());
+		prefnode.remove(prefkey.name());
 	}
 
 	/**
-	 * Clears a single system preference.  This method is analogous to a 'reset
-	 * default' function for the given preference.
+	 * Clears all of the stored preferences associated with the given key's
+	 * package name, reverting all those preferences to their default values.
 	 * 
-	 * @param sysprefkey System preferences key to have it's value cleared.
-	 */
-	public static void clear(SystemPreferencesKey sysprefkey) {
-
-		java.util.prefs.Preferences prefnode = systempreferences.node(
-				sysprefkey.getClass().getPackage().getName());
-		prefnode.remove(sysprefkey.name());
-	}
-
-	/**
-	 * Clears all of the user preferences associated with the given key's
-	 * package name.  This method is analogous with a 'reset defaults' function
-	 * for all user preferences with the same package name.
-	 * 
-	 * @param userprefkey User preferences key belonging to the node of
-	 * 					  preferences to clear.
+	 * @param prefkey Preferences key belonging to the node of preferences to
+	 * 				  clear.
 	 * @throws PreferencesException If the preferences could not be cleared.
 	 */
-	public static void clearNode(UserPreferencesKey userprefkey) throws PreferencesException {
+	public static void clearNode(PreferencesKey prefkey) throws PreferencesException {
 
 		try {
-			java.util.prefs.Preferences prefnode = userpreferences.node(
-					userprefkey.getClass().getPackage().getName());
-			prefnode.clear();
-		}
-		catch (BackingStoreException ex) {
-			throw new PreferencesException(ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * Clears all of the system preferences associated with the given key's
-	 * package name.  This method is analogous with a 'reset defaults' function
-	 * for all system preferences with the same package name.
-	 * 
-	 * @param sysprefkey System preferences key belonging to the node of
-	 * 					 preferences to clear.
-	 * @throws PreferencesException If the preferences could not be cleared.
-	 */
-	public static void clearNode(SystemPreferencesKey sysprefkey) throws PreferencesException {
-
-		try {
-			java.util.prefs.Preferences prefnode = systempreferences.node(
-					sysprefkey.getClass().getPackage().getName());
+			java.util.prefs.Preferences prefnode =
+					(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
+					.node(prefkey.getClass().getPackage().getName());
 			prefnode.clear();
 		}
 		catch (BackingStoreException ex) {
@@ -135,64 +99,68 @@ public class Preferences {
 	/**
 	 * Returns a preference value.
 	 * 
-	 * @param <T> Value type.
 	 * @param rootprefs One of the system or user preference root nodes.
-	 * @param prefkey Preferences key.
-	 * @param type	  Return type.
+	 * @param prefkey	Preferences key.
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> T get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Class<T> type) {
+	private static Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey) {
 
 		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
-		String name = prefkey.name();
-		T value = (T)prefkey.defaultValue();
+		String key = prefkey.name();
+		Object value = prefkey.defaultValue();
+		Class<?> type = value.getClass();
 
-		if (type == Integer.TYPE) {
-			value = (T)new Integer(prefnode.getInt(name, (Integer)value));
+		if (type == Boolean.class) {
+			value = prefnode.getBoolean(key, (Boolean)value);
+		}
+		else if (type == Integer.class) {
+			value = prefnode.getInt(key, (Integer)value);
 		}
 		else if (type == String.class) {
-			value = (T)prefnode.get(name, (String)value);
+			value = prefnode.get(key, (String)value);
 		}
 
 		return value;
 	}
 
 	/**
-	 * Returns a user preference value.
+	 * Returns a preference value.
 	 * 
-	 * @param userprefkey User preferences key.
-	 * @return The value of the user preference, or the default if it doesn't
-	 * 		   exist in the preferences.
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @return The value of the preference, or the default if it doesn't exist
+	 * 		   in the preferences.
 	 */
-	public static String get(UserPreferencesKey userprefkey) {
+	public static String get(PreferencesKey prefkey) {
 
-		return get(userpreferences, userprefkey, String.class);
-	}
-
-	/**
-	 * Returns a system preference value.
-	 * 
-	 * @param sysprefkey System preferences key.
-	 * @return The value of the system preference, or the default if it doesn't
-	 * 		   exist in the preferences.
-	 */
-	public static String get(SystemPreferencesKey sysprefkey) {
-
-		return get(systempreferences, sysprefkey, String.class);
+		return (String)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
 
 	/**
 	 * Returns a preference value.
 	 * 
-	 * @param userprefkey User preferences key.
-	 * @return The value of the user preference, or the default if it doesn't
-	 * 		   exist in the preferences.
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @return The value of the preference, or the default if it doesn't exist
+	 * 		   in the preferences.
 	 */
-	public static int getInt(UserPreferencesKey userprefkey) {
+	public static boolean getBoolean(PreferencesKey prefkey) {
 
-		return get(userpreferences, userprefkey, Integer.TYPE);
+		return (Boolean)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
+	}
+
+	/**
+	 * Returns a preference value.
+	 * 
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @return The value of the preference, or the default if it doesn't exist
+	 * 		   in the preferences.
+	 */
+	public static int getInt(PreferencesKey prefkey) {
+
+		return (Integer)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
 
 	/**
@@ -216,26 +184,60 @@ public class Preferences {
 	/**
 	 * Alters a user preference value.
 	 * 
-	 * @param userprefkey User preferences key.
-	 * @param value		  The value to associate with the key.
+	 * @param rootprefs One of the system or user preferences.
+	 * @param prefkey	Preferences key.
+	 * @param value		The value to associate with the key.
 	 */
-	public static void set(UserPreferencesKey userprefkey, String value) {
+	private static void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value) {
 
-		java.util.prefs.Preferences prefnode = userpreferences.node(
-				userprefkey.getClass().getPackage().getName());
-		prefnode.put(userprefkey.name(), value);
+		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
+		String key = prefkey.name();
+		Class<?> type = value.getClass();
+
+		if (type == Boolean.class) {
+			prefnode.putBoolean(key, (Boolean)value);
+		}
+		else if (type == Integer.class) {
+			prefnode.putInt(key, (Integer)value);
+		}
+		else if (type == String.class) {
+			prefnode.put(key, (String)value);
+		}
 	}
 
 	/**
-	 * Alters a system preference value.
+	 * Sets a preference value.
 	 * 
-	 * @param sysprefkey System preferences key.
-	 * @param value		 The value to associate with the key.
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @param value	  The value to associate with the key.
 	 */
-	public static void set(SystemPreferencesKey sysprefkey, String value) {
+	public static void set(PreferencesKey prefkey, String value) {
 
-		java.util.prefs.Preferences prefnode = systempreferences.node(
-				sysprefkey.getClass().getPackage().getName());
-		prefnode.put(sysprefkey.name(), value);
+		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
+	}
+
+	/**
+	 * Sets a preference value.
+	 * 
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @param value	  The value to associate with the key.
+	 */
+	public static void setBoolean(PreferencesKey prefkey, boolean value) {
+
+		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
+	}
+
+	/**
+	 * Sets a preference value.
+	 * 
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @param value	  The value to associate with the key.
+	 */
+	public static void setInt(PreferencesKey prefkey, int value) {
+
+		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}
 }

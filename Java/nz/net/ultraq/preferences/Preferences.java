@@ -49,11 +49,11 @@ public class Preferences {
 	 * Clears all of the stored preferences associated with the given key's
 	 * package name, reverting all those preferences to their default values.
 	 * 
-	 * @param prefkey Preferences key belonging to the node of preferences to
+	 * @param prefkey Preferences key belonging to the package of preferences to
 	 * 				  clear.
 	 * @throws PreferencesException If the preferences could not be cleared.
 	 */
-	public static void clearNode(PreferencesKey prefkey) throws PreferencesException {
+	public static void clearPackage(PreferencesKey prefkey) throws PreferencesException {
 
 		try {
 			java.util.prefs.Preferences prefnode =
@@ -67,28 +67,14 @@ public class Preferences {
 	}
 
 	/**
-	 * Pushes any cached user preferences to the preferences' backing store.
+	 * Pushes any cached preferences to the preferences' backing store.
 	 * 
 	 * @throws PreferencesException If the preferences could not be flushed.
 	 */
-	public static void flushUser() throws PreferencesException {
+	public static void flushPreferences() throws PreferencesException {
 
 		try {
 			userpreferences.flush();
-		}
-		catch (BackingStoreException ex) {
-			throw new PreferencesException(ex.getMessage(), ex);
-		}
-	}
-
-	/**
-	 * Pushes any cached system preferences to the preferences' backing store.
-	 * 
-	 * @throws PreferencesException If the preferences could not be flushed.
-	 */
-	public static void flushSystem() throws PreferencesException {
-
-		try {
 			systempreferences.flush();
 		}
 		catch (BackingStoreException ex) {
@@ -164,17 +150,19 @@ public class Preferences {
 	}
 
 	/**
-	 * Return whether or not the node for this key class exists.
+	 * Return whether or not the preferences for the key's package exist.
 	 * 
-	 * @param keyclass
+	 * @param prefkey Preferences key representative of the package to check.
 	 * @return <tt>true</tt> if the node housing the given key class exists.
 	 * @throws PreferencesException If there was some error in communicating
 	 * 		   with the backing store.
 	 */
-	public static boolean nodeExists(Class<? extends PreferencesKey> keyclass) throws PreferencesException {
+	public static boolean packageExists(PreferencesKey prefkey) throws PreferencesException {
 
 		try {
-			return systempreferences.nodeExists(keyclass.getPackage().getName());
+			java.util.prefs.Preferences prefs = prefkey instanceof UserPreferencesKey ?
+					userpreferences : systempreferences;
+			return prefs.nodeExists(prefkey.getClass().getPackage().getName());
 		}
 		catch (BackingStoreException ex) {
 			throw new PreferencesException(ex.getMessage(), ex);

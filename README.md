@@ -7,7 +7,7 @@ type-safe application preferences.  I wrote this library out of my wish to use
 the then-new Java 5 feature of `enum`'s as keys for preference values instead of
 String constants like most people were doing before Java 5 days.
 
-Precompiled JAR downloads available in the [Downloads](/downloads) section.
+Precompiled JAR downloads available in the [Downloads](preferences/downloads) section.
 
 
 Requirements

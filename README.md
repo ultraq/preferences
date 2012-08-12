@@ -17,6 +17,21 @@ Requirements
  - Java 6
 
 
+Installation
+------------
+
+### Standalone distribution
+Download a copy of of the pre-compiled JAR from [the Downloads section](preferences/downloads)
+or build the project from the source code here on GitHub.
+
+### For Maven and Maven-compatible dependency managers
+Add a dependency to your project with the following co-ordinates:
+
+ - GroupId: `nz.net.ultraq.preferences`
+ - ArtifactId: `preferences`
+ - Version: `1.2.1`
+
+
 Usage
 -----
 
@@ -59,3 +74,16 @@ I usually use this library in-conjunction with my [Preferences - XML](https://gi
 project, which will write user/system preferences to an XML file in a
 subdirectory of your project, rather than using the default implementation
 which, on Windows, uses the registry as the backing store.
+
+
+Changelog
+---------
+
+### 1.2.1
+ - Switched from Ant to Gradle as a build tool.
+ - Made project available from Maven Central.  Maven co-ordinates added to the
+   [Installation](#installation) section.
+
+### 1.2
+ - Initial GitHub version.
+

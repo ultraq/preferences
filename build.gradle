@@ -15,6 +15,7 @@ apply from: 'https://raw.github.com/ultraq/gradle-support/master/bundle.gradle'
 
 //project.name        = 'Preferences'
 project.description = 'Alternate entry-point to the Java Preferences API (java.util.prefs).'
+project.archivesBaseName = 'preferences'
 project.sourceCompatibility = '1.6'
 
 project.group    = 'nz.net.ultraq.preferences'

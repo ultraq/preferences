@@ -6,23 +6,15 @@ import java.util.prefs.BackingStoreException;
 /**
  * Alternate entrypoint to the Preferences API.
  * <p>
- * This is only an alternate method for accessing preferences, and does not
- * prevent one from utilizing the Preferences API in the normal manner, nor does
- * its use tie one down to my XML preferences implementation - if another
- * implementation is 'higher up' in the classloading chain, then that
- * implementation will be and will actually back the calls made to this class.
+ * This is only an alternate method for accessing preferences and does not
+ * prevent one from utilizing the Preferences API in the normal manner.
  * 
  * @author Emanuel Rabina
  */
 public class Preferences {
 
-	private static final java.util.prefs.Preferences systempreferences;
-	private static final java.util.prefs.Preferences userpreferences;
-
-	static {
-		systempreferences = java.util.prefs.Preferences.systemRoot();
-		userpreferences   = java.util.prefs.Preferences.userRoot();
-	}
+	private static final java.util.prefs.Preferences systempreferences = java.util.prefs.Preferences.systemRoot();
+	private static final java.util.prefs.Preferences userpreferences   = java.util.prefs.Preferences.userRoot();
 
 	/**
 	 * Hidden default constructor, as this class is only ever meant to be used
@@ -150,23 +142,27 @@ public class Preferences {
 	}
 
 	/**
-	 * Return whether or not the preferences for the key's package exist.
+	 * Return whether or not the given preference is set in the backing store.
 	 * 
-	 * @param prefkey Preferences key representative of the package to check.
-	 * @return <tt>true</tt> if the node housing the given key class exists.
-	 * @throws PreferencesException If there was some error in communicating
-	 * 		   with the backing store.
+	 * @param prefkey Preference to check.
+	 * @return <tt>true</tt> if the preference has actually been set in the
+	 * 		   backing store.
 	 */
-	public static boolean packageExists(PreferencesKey prefkey) throws PreferencesException {
+	public static boolean preferenceExists(final PreferencesKey prefkey) {
 
-		try {
-			java.util.prefs.Preferences prefs = prefkey instanceof UserPreferencesKey ?
-					userpreferences : systempreferences;
-			return prefs.nodeExists(prefkey.getClass().getPackage().getName());
-		}
-		catch (BackingStoreException ex) {
-			throw new PreferencesException(ex.getMessage(), ex);
-		}
+		// Create a dummy preference key to check against
+		PreferencesKey dummypref = new PreferencesKey() {
+			@Override
+			public String defaultValue() {
+				return prefkey.defaultValue().toString() + "-";
+			}
+			@Override
+			public String name() {
+				return prefkey.name();
+			}
+		};
+		Object value = get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, dummypref);
+		return !value.equals(dummypref.defaultValue());
 	}
 
 	/**

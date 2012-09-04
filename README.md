@@ -26,7 +26,7 @@ Add a dependency to your project with the following co-ordinates:
 
  - GroupId: `nz.net.ultraq.preferences`
  - ArtifactId: `preferences`
- - Version: `1.2.1`
+ - Version: `1.2.2`
 
 
 Usage
@@ -75,6 +75,13 @@ which, on Windows, uses the registry as the backing store.
 
 Changelog
 ---------
+
+### 1.2.2
+ - Minor fixes from the updated [maven-support](https://github.com/ultraq/gradle-support)
+   Gradle script.
+ - Change of 'preference exists' check instead of 'package exists' check since
+   exposing package reveals the node structure (and I'm trying to hide that with
+   this library).
 
 ### 1.2.1
  - Switched from Ant to Gradle as a build tool.

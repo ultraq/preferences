@@ -1,6 +1,11 @@
 
 package nz.net.ultraq.preferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.prefs.BackingStoreException;
 
 /**
@@ -81,8 +86,10 @@ public class Preferences {
 	 * @param prefkey	Preferences key.
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
+	 * @throws PreferencesException
 	 */
-	private static Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey) {
+	private static Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey)
+		throws PreferencesException {
 
 		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
 		String key = prefkey.name();
@@ -97,6 +104,20 @@ public class Preferences {
 		}
 		else if (type == String.class) {
 			value = prefnode.get(key, (String)value);
+		}
+		else {
+			byte[] objectbytes = prefnode.getByteArray(key, new byte[]{});
+			if (objectbytes.length != 0) {
+				try {
+					value = new ObjectInputStream(new ByteArrayInputStream(objectbytes)).readObject();
+				}
+				catch (IOException ex) {
+					throw new PreferencesException("Unable to read object", ex);
+				}
+				catch (ClassNotFoundException ex) {
+					throw new PreferencesException("Unable to read object", ex);
+				}
+			}
 		}
 
 		return value;
@@ -126,6 +147,19 @@ public class Preferences {
 	public static boolean getBoolean(PreferencesKey prefkey) {
 
 		return (Boolean)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
+	}
+
+	/**
+	 * Returns a preference value.
+	 * 
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @return The value of the preference, or the default if it doesn't exist
+	 * 		   in the preferences.
+	 */
+	public static Object getObject(PreferencesKey prefkey) {
+
+		return get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
 
 	/**
@@ -171,8 +205,10 @@ public class Preferences {
 	 * @param rootprefs One of the system or user preferences.
 	 * @param prefkey	Preferences key.
 	 * @param value		The value to associate with the key.
+	 * @throws PreferencesException
 	 */
-	private static void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value) {
+	private static void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value)
+		throws PreferencesException {
 
 		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
 		String key = prefkey.name();
@@ -186,6 +222,16 @@ public class Preferences {
 		}
 		else if (type == String.class) {
 			prefnode.put(key, (String)value);
+		}
+		else {
+			try {
+				ByteArrayOutputStream objectbytes = new ByteArrayOutputStream();
+				new ObjectOutputStream(objectbytes).writeObject(value);
+				prefnode.putByteArray(key, objectbytes.toByteArray());
+			}
+			catch (IOException ex) {
+				throw new PreferencesException("Unable to write object", ex);
+			}
 		}
 	}
 
@@ -221,6 +267,18 @@ public class Preferences {
 	 * @param value	  The value to associate with the key.
 	 */
 	public static void setInt(PreferencesKey prefkey, int value) {
+
+		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
+	}
+
+	/**
+	 * Sets a preference value.
+	 * 
+	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
+	 * 				  or {@link SystemPreferencesKey}.
+	 * @param value	  The value to associate with the key.
+	 */
+	public static void setObject(PreferencesKey prefkey, Object value) {
 
 		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}

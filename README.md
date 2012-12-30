@@ -8,7 +8,7 @@ the then-new Java 5 feature of `enum`'s as keys for preference values instead of
 String constants like most people were doing before Java 5 days.
 
  - Current version: 1.2.2
- - Release date: ?? ??? 20??
+ - Release date: 12 August 2012
 
 
 Requirements

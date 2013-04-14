@@ -41,34 +41,36 @@ the `UserPreferencesKey` or `SystemPreferencesKey` interfaces for user or system
 -scope preferences respectively, then use the get/set methods using your `enum`
 classes.
 
-	public enum MyPreferences implements UserPreferencesKey {
-	
-		WINDOW_WIDTH  (800),
-		WINDOW_HEIGHT (600);
+```java
+public enum MyPreferences implements UserPreferencesKey {
 
-		public final Object defaultValue;
-		
-		private MyPreferences(Object defaultValue) {
-			this.defaultValue = defaultValue;
-		}
+	WINDOW_WIDTH  (800),
+	WINDOW_HEIGHT (600);
+
+	public final Object defaultValue;
 	
-		@Override
-		public Object defaultValue() {
-			return defaultValue;
-		}
+	private MyPreferences(Object defaultValue) {
+		this.defaultValue = defaultValue;
 	}
-	
-	public class MyClass {
-	
-		public static void main(String[] args) {
-	
-			int windowWidth = Preferences.getInt(MyPreferences.WINDOW_WIDTH);
-			int windowHeight = Preferences.getInt(MyPreferences.WINDOW_HEIGHT);
-	
-			Preferences.setInt(MyPreferences.WINDOW_WIDTH, 1024);
-			Preferences.flush();
-		}
+
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
 	}
+}
+
+public class MyClass {
+
+	public static void main(String[] args) {
+
+		int windowWidth = Preferences.getInt(MyPreferences.WINDOW_WIDTH);
+		int windowHeight = Preferences.getInt(MyPreferences.WINDOW_HEIGHT);
+
+		Preferences.setInt(MyPreferences.WINDOW_WIDTH, 1024);
+		Preferences.flush();
+	}
+}
+```
 
 I usually use this library in-conjunction with my [Preferences - XML](https://github.com/ultraq/preferences-xml)
 project, which will write user/system preferences to an XML file in a

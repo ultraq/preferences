@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package nz.net.ultraq.preferences;
+package nz.net.ultraq.preferences
 
 /**
  * User-specific preferences key.
  * 
  * @author Emanuel Rabina
  */
-public interface SystemPreferencesKey extends PreferencesKey {
+interface UserPreferencesKey extends PreferencesKey {
 }

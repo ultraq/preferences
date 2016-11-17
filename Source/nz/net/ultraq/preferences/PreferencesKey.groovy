@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package nz.net.ultraq.preferences;
+package nz.net.ultraq.preferences
 
 /**
  * Interface outlining the format of anything that wants to retrieve a
@@ -23,7 +23,7 @@ package nz.net.ultraq.preferences;
  * 
  * @author Emanuel Rabina
  */
-public interface PreferencesKey {
+interface PreferencesKey {
 
 	/**
 	 * Returns the default setting value to use if the setting key does not
@@ -31,7 +31,7 @@ public interface PreferencesKey {
 	 * 
 	 * @return Default setting value.
 	 */
-	public Object defaultValue();
+	Object defaultValue();
 
 	/**
 	 * Returns the name of the setting/parameter to retrieve.  The Java {@code enum}
@@ -40,5 +40,5 @@ public interface PreferencesKey {
 	 * 
 	 * @return <tt>String</tt> of the key used to map the setting to.
 	 */
-	public String name();
+	String name();
 }

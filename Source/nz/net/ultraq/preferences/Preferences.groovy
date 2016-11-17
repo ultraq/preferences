@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-package nz.net.ultraq.preferences;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.prefs.BackingStoreException;
+package nz.net.ultraq.preferences
 
 /**
  * Alternate entrypoint to the Preferences API.
@@ -31,17 +24,10 @@ import java.util.prefs.BackingStoreException;
  * 
  * @author Emanuel Rabina
  */
-public class Preferences {
+class Preferences {
 
-	private static final java.util.prefs.Preferences systempreferences = java.util.prefs.Preferences.systemRoot();
-	private static final java.util.prefs.Preferences userpreferences   = java.util.prefs.Preferences.userRoot();
-
-	/**
-	 * Hidden default constructor, as this class is only ever meant to be used
-	 * statically.
-	 */
-	private Preferences() {
-	}
+	private final java.util.prefs.Preferences systempreferences = java.util.prefs.Preferences.systemRoot();
+	private final java.util.prefs.Preferences userpreferences   = java.util.prefs.Preferences.userRoot();
 
 	/**
 	 * Clears a stored preference, allowing future calls for the preference to
@@ -49,7 +35,7 @@ public class Preferences {
 	 * 
 	 * @param prefkey Preferences key to have it's value cleared.
 	 */
-	public static void clear(PreferencesKey prefkey) {
+	void clear(PreferencesKey prefkey) {
 
 		java.util.prefs.Preferences prefnode =
 				(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
@@ -63,35 +49,22 @@ public class Preferences {
 	 * 
 	 * @param prefkey Preferences key belonging to the package of preferences to
 	 * 				  clear.
-	 * @throws PreferencesException If the preferences could not be cleared.
 	 */
-	public static void clearPackage(PreferencesKey prefkey) throws PreferencesException {
+	void clearPackage(PreferencesKey prefkey) {
 
-		try {
-			java.util.prefs.Preferences prefnode =
-					(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
-					.node(prefkey.getClass().getPackage().getName());
-			prefnode.clear();
-		}
-		catch (BackingStoreException ex) {
-			throw new PreferencesException(ex.getMessage(), ex);
-		}
+		java.util.prefs.Preferences prefnode =
+				(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
+				.node(prefkey.getClass().getPackage().getName());
+		prefnode.clear();
 	}
 
 	/**
 	 * Pushes any cached preferences to the preferences' backing store.
-	 * 
-	 * @throws PreferencesException If the preferences could not be flushed.
 	 */
-	public static void flushPreferences() throws PreferencesException {
+	void flushPreferences() {
 
-		try {
-			userpreferences.flush();
-			systempreferences.flush();
-		}
-		catch (BackingStoreException ex) {
-			throw new PreferencesException(ex.getMessage(), ex);
-		}
+		userpreferences.flush();
+		systempreferences.flush();
 	}
 
 	/**
@@ -101,10 +74,8 @@ public class Preferences {
 	 * @param prefkey	Preferences key.
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
-	 * @throws PreferencesException
 	 */
-	private static Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey)
-		throws PreferencesException {
+	Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey) {
 
 		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
 		String key = prefkey.name();
@@ -121,17 +92,9 @@ public class Preferences {
 			value = prefnode.get(key, (String)value);
 		}
 		else {
-			byte[] objectbytes = prefnode.getByteArray(key, new byte[]{});
+			byte[] objectbytes = prefnode.getByteArray(key, [] as byte[]);
 			if (objectbytes.length != 0) {
-				try {
-					value = new ObjectInputStream(new ByteArrayInputStream(objectbytes)).readObject();
-				}
-				catch (IOException ex) {
-					throw new PreferencesException("Unable to read object", ex);
-				}
-				catch (ClassNotFoundException ex) {
-					throw new PreferencesException("Unable to read object", ex);
-				}
+				value = new ObjectInputStream(new ByteArrayInputStream(objectbytes)).readObject();
 			}
 		}
 
@@ -146,7 +109,7 @@ public class Preferences {
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
 	 */
-	public static String get(PreferencesKey prefkey) {
+	String get(PreferencesKey prefkey) {
 
 		return (String)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
@@ -159,7 +122,7 @@ public class Preferences {
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
 	 */
-	public static boolean getBoolean(PreferencesKey prefkey) {
+	boolean getBoolean(PreferencesKey prefkey) {
 
 		return (Boolean)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
@@ -172,7 +135,7 @@ public class Preferences {
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
 	 */
-	public static Object getObject(PreferencesKey prefkey) {
+	Object getObject(PreferencesKey prefkey) {
 
 		return get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
@@ -185,7 +148,7 @@ public class Preferences {
 	 * @return The value of the preference, or the default if it doesn't exist
 	 * 		   in the preferences.
 	 */
-	public static int getInt(PreferencesKey prefkey) {
+	int getInt(PreferencesKey prefkey) {
 
 		return (Integer)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
 	}
@@ -197,7 +160,7 @@ public class Preferences {
 	 * @return <tt>true</tt> if the preference has actually been set in the
 	 * 		   backing store.
 	 */
-	public static boolean preferenceExists(final PreferencesKey prefkey) {
+	boolean preferenceExists(final PreferencesKey prefkey) {
 
 		// Create a dummy preference key to check against
 		PreferencesKey dummypref = new PreferencesKey() {
@@ -220,10 +183,8 @@ public class Preferences {
 	 * @param rootprefs One of the system or user preferences.
 	 * @param prefkey	Preferences key.
 	 * @param value		The value to associate with the key.
-	 * @throws PreferencesException
 	 */
-	private static void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value)
-		throws PreferencesException {
+	void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value) {
 
 		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
 		String key = prefkey.name();
@@ -239,14 +200,9 @@ public class Preferences {
 			prefnode.put(key, (String)value);
 		}
 		else {
-			try {
-				ByteArrayOutputStream objectbytes = new ByteArrayOutputStream();
-				new ObjectOutputStream(objectbytes).writeObject(value);
-				prefnode.putByteArray(key, objectbytes.toByteArray());
-			}
-			catch (IOException ex) {
-				throw new PreferencesException("Unable to write object", ex);
-			}
+			ByteArrayOutputStream objectbytes = new ByteArrayOutputStream();
+			new ObjectOutputStream(objectbytes).writeObject(value);
+			prefnode.putByteArray(key, objectbytes.toByteArray());
 		}
 	}
 
@@ -257,7 +213,7 @@ public class Preferences {
 	 * 				  or {@link SystemPreferencesKey}.
 	 * @param value	  The value to associate with the key.
 	 */
-	public static void set(PreferencesKey prefkey, String value) {
+	void set(PreferencesKey prefkey, String value) {
 
 		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}
@@ -269,7 +225,7 @@ public class Preferences {
 	 * 				  or {@link SystemPreferencesKey}.
 	 * @param value	  The value to associate with the key.
 	 */
-	public static void setBoolean(PreferencesKey prefkey, boolean value) {
+	void setBoolean(PreferencesKey prefkey, boolean value) {
 
 		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}
@@ -281,7 +237,7 @@ public class Preferences {
 	 * 				  or {@link SystemPreferencesKey}.
 	 * @param value	  The value to associate with the key.
 	 */
-	public static void setInt(PreferencesKey prefkey, int value) {
+	void setInt(PreferencesKey prefkey, int value) {
 
 		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}
@@ -293,7 +249,7 @@ public class Preferences {
 	 * 				  or {@link SystemPreferencesKey}.
 	 * @param value	  The value to associate with the key.
 	 */
-	public static void setObject(PreferencesKey prefkey, Object value) {
+	void setObject(PreferencesKey prefkey, Object value) {
 
 		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}

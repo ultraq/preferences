@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2012, Emanuel Rabina (http://www.ultraq.net.nz/)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,9 @@ public interface PreferencesKey {
 	public Object defaultValue();
 
 	/**
-	 * Returns the name of the setting/parameter to retrieve.
+	 * Returns the name of the setting/parameter to retrieve.  The Java {@code enum}
+	 * type already has this method, so implementations won't need to do anything
+	 * for this method.
 	 * 
 	 * @return <tt>String</tt> of the key used to map the setting to.
 	 */

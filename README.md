@@ -2,6 +2,7 @@
 Preferences
 ===========
 
+[![Build Status](https://travis-ci.org/ultraq/preferences.svg)](https://travis-ci.org/ultraq/preferences)
 [![Maven Central](https://img.shields.io/maven-central/v/nz.net.ultraq.preferences/preferences.svg?maxAge=3600)](http://search.maven.org/#search|ga|1|g%3A%22nz.net.ultraq.preferences%22%20AND%20a%3A%22preferences%22)
 [![License](https://img.shields.io/github/license/ultraq/preferences.svg?maxAge=2592000)](https://github.com/ultraq/preferences/blob/master/LICENSE.txt)
 

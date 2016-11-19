@@ -30,6 +30,21 @@ class Preferences {
 	private final java.util.prefs.Preferences userPreferences   = java.util.prefs.Preferences.userRoot()
 
 	/**
+	 * Clears <em>all</em> preferences.
+	 */
+	void clear() {
+
+		def clearRootAndChildren = { root ->
+			root.clear()
+			root.childrenNames().each { childName ->
+				root.node(childName).clear()
+			}
+		}
+		clearRootAndChildren(systemPreferences)
+		clearRootAndChildren(userPreferences)
+	}
+
+	/**
 	 * Clears a stored preference, allowing future calls for the preference to
 	 * revert to its default value.
 	 * 

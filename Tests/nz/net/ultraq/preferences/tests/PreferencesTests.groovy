@@ -51,6 +51,22 @@ class PreferencesTests {
 	}
 
 	/**
+	 * Clear a set preference.
+	 */
+	@Test
+	void clearPreference() {
+
+		// Change then clear a value
+		def newValue = 'goodbye'
+		preferences.set(TestSystemPreferences.TEST_STRING, newValue)
+		preferences.clear(TestSystemPreferences.TEST_STRING)
+
+		// Assert cleared
+		def value = preferences.get(TestSystemPreferences.TEST_STRING)
+		assert value == TestSystemPreferences.TEST_STRING.defaultValue()
+	}
+
+	/**
 	 * Retrieve a default preference.
 	 */
 	@Test

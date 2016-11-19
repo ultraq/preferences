@@ -3,19 +3,20 @@ Preferences
 ===========
 
 [![Build Status](https://travis-ci.org/ultraq/preferences.svg)](https://travis-ci.org/ultraq/preferences)
+[![GitHub Release](https://img.shields.io/github/release/ultraq/preferences.svg?maxAge=3600)](https://github.com/ultraq/preferences/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/nz.net.ultraq.preferences/preferences.svg?maxAge=3600)](http://search.maven.org/#search|ga|1|g%3A%22nz.net.ultraq.preferences%22%20AND%20a%3A%22preferences%22)
 [![License](https://img.shields.io/github/license/ultraq/preferences.svg?maxAge=2592000)](https://github.com/ultraq/preferences/blob/master/LICENSE.txt)
 
-An alternate entry-point to the Java Preferences API (java.util.prefs) for
-type-safe application preferences.  I wrote this library out of my wish to use
-the then-new Java 5 feature of `enum`'s as keys for preference values instead of
-String constants like most people were doing before Java 5 days.
+A simplified and typesafe entry point to the Java Preferences API (`java.util.prefs`).
+I wrote this library out of my wish to use the then-new Java 5 feature of `enum`'s
+as keys for preference values instead of `String` constants like most people
+were doing before Java 5 days.
 
 
 Installation
 ------------
 
-Minimum of Java 6 required.
+Minimum of Java 8 required.
 
 ### Standalone distribution
 Copy the JAR from [the latest release bundle](https://github.com/ultraq/preferences/releases/latest),
@@ -32,8 +33,9 @@ Add a dependency to your project with the following co-ordinates:
 Usage
 -----
 
-Use the static methods of the `nz.net.ultraq.preferences.Preferences` class to
-access the Java Preferences API. To get/set values, write `enum`s that implement
+Create a new `nz.net.ultraq.preferences.Preferences` instance and use its public
+methods to perform basic CRUD operations on user or system preferences.  To
+create a preference that can be used by this class, write `enum`s that implement
 the `UserPreferencesKey` or `SystemPreferencesKey` interfaces for user or system
 -scope preferences respectively, then use the get/set methods using your `enum`
 classes.

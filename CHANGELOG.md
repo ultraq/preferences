@@ -8,6 +8,8 @@ Changelog
  - Preferences object is no longer full of static methods, you now need to
    create an instance of one to use its methods.
  - Unit tests added!
+ - Greatly simplified the public API by removing methods that are now redundant
+   and making other methods automatic thus no longer requiring developer input.
 
 ### 1.2.2
  - Minor fixes from the updated [maven-support](https://github.com/ultraq/gradle-support)

@@ -26,75 +26,60 @@ package nz.net.ultraq.preferences
  */
 class Preferences {
 
-	private final java.util.prefs.Preferences systempreferences = java.util.prefs.Preferences.systemRoot();
-	private final java.util.prefs.Preferences userpreferences   = java.util.prefs.Preferences.userRoot();
+	private final java.util.prefs.Preferences systemPreferences = java.util.prefs.Preferences.systemRoot()
+	private final java.util.prefs.Preferences userPreferences   = java.util.prefs.Preferences.userRoot()
 
 	/**
 	 * Clears a stored preference, allowing future calls for the preference to
 	 * revert to its default value.
 	 * 
-	 * @param prefkey Preferences key to have it's value cleared.
+	 * @param preferencesKey Key to have it's value cleared.
 	 */
-	void clear(PreferencesKey prefkey) {
+	void clear(PreferencesKey preferencesKey) {
 
-		java.util.prefs.Preferences prefnode =
-				(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
-				.node(prefkey.getClass().getPackage().getName());
-		prefnode.remove(prefkey.name());
+		def preferencesNode =
+			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
+				.node(preferencesKey.class.package.name)
+		preferencesNode.remove(preferencesKey.name())
 	}
 
 	/**
-	 * Clears all of the stored preferences associated with the given key's
-	 * package name, reverting all those preferences to their default values.
+	 * Ensures that any cached preferences are pushed to the backing store.
+	 */
+	protected void finalize() {
+
+		userPreferences.flush()
+		systemPreferences.flush()
+	}
+
+	/**
+	 * Returns the value for the given preference.
 	 * 
-	 * @param prefkey Preferences key belonging to the package of preferences to
-	 * 				  clear.
+	 * @param preferencesKey Preferences key.
+	 * @return The value of the preference, or the default value if it hasn't been
+	 *         overidden with another value.
 	 */
-	void clearPackage(PreferencesKey prefkey) {
+	public <T> T get(PreferencesKey preferencesKey) {
 
-		java.util.prefs.Preferences prefnode =
-				(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences)
-				.node(prefkey.getClass().getPackage().getName());
-		prefnode.clear();
-	}
+		def preferencesNode =
+			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
+			.node(preferencesKey.class.package.name)
+		def key = preferencesKey.name()
+		def value = preferencesKey.defaultValue()
 
-	/**
-	 * Pushes any cached preferences to the preferences' backing store.
-	 */
-	void flushPreferences() {
-
-		userpreferences.flush();
-		systempreferences.flush();
-	}
-
-	/**
-	 * Returns a preference value.
-	 * 
-	 * @param rootprefs One of the system or user preference root nodes.
-	 * @param prefkey	Preferences key.
-	 * @return The value of the preference, or the default if it doesn't exist
-	 * 		   in the preferences.
-	 */
-	Object get(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey) {
-
-		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
-		String key = prefkey.name();
-		Object value = prefkey.defaultValue();
-		Class<?> type = value.getClass();
-
-		if (type == Boolean.class) {
-			value = prefnode.getBoolean(key, (Boolean)value);
+		if (value instanceof String) {
+			value = preferencesNode.get(key, value)
 		}
-		else if (type == Integer.class) {
-			value = prefnode.getInt(key, (Integer)value);
+		else if (value instanceof Boolean) {
+			value = preferencesNode.getBoolean(key, value)
 		}
-		else if (type == String.class) {
-			value = prefnode.get(key, (String)value);
+		else if (value instanceof Integer) {
+			value = preferencesNode.getInt(key, value)
 		}
-		else {
-			byte[] objectbytes = prefnode.getByteArray(key, [] as byte[]);
-			if (objectbytes.length != 0) {
-				value = new ObjectInputStream(new ByteArrayInputStream(objectbytes)).readObject();
+		else if (value instanceof byte[]) {
+			def bytes = preferencesNode.getByteArray(key, value)
+			if (bytes.length) {
+				value = new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject()
 			}
 		}
 
@@ -102,155 +87,31 @@ class Preferences {
 	}
 
 	/**
-	 * Returns a preference value.
+	 * Sets a value for the given preference.
 	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @return The value of the preference, or the default if it doesn't exist
-	 * 		   in the preferences.
+	 * @param preferencesKey Preferences key.
+	 * @param value          The value to associate with the key.
 	 */
-	String get(PreferencesKey prefkey) {
+	void set(PreferencesKey preferencesKey, Object value) {
 
-		return (String)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
-	}
+		def preferencesNode =
+			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
+			.node(preferencesKey.class.package.name)
+		def key = preferencesKey.name()
 
-	/**
-	 * Returns a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @return The value of the preference, or the default if it doesn't exist
-	 * 		   in the preferences.
-	 */
-	boolean getBoolean(PreferencesKey prefkey) {
-
-		return (Boolean)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
-	}
-
-	/**
-	 * Returns a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @return The value of the preference, or the default if it doesn't exist
-	 * 		   in the preferences.
-	 */
-	Object getObject(PreferencesKey prefkey) {
-
-		return get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
-	}
-
-	/**
-	 * Returns a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @return The value of the preference, or the default if it doesn't exist
-	 * 		   in the preferences.
-	 */
-	int getInt(PreferencesKey prefkey) {
-
-		return (Integer)get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey);
-	}
-
-	/**
-	 * Return whether or not the given preference is set in the backing store.
-	 * 
-	 * @param prefkey Preference to check.
-	 * @return <tt>true</tt> if the preference has actually been set in the
-	 * 		   backing store.
-	 */
-	boolean preferenceExists(final PreferencesKey prefkey) {
-
-		// Create a dummy preference key to check against
-		PreferencesKey dummypref = new PreferencesKey() {
-			@Override
-			public String defaultValue() {
-				return prefkey.defaultValue().toString() + "-";
-			}
-			@Override
-			public String name() {
-				return prefkey.name();
-			}
-		};
-		Object value = get(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, dummypref);
-		return !value.equals(dummypref.defaultValue());
-	}
-
-	/**
-	 * Alters a user preference value.
-	 * 
-	 * @param rootprefs One of the system or user preferences.
-	 * @param prefkey	Preferences key.
-	 * @param value		The value to associate with the key.
-	 */
-	void set(java.util.prefs.Preferences rootprefs, PreferencesKey prefkey, Object value) {
-
-		java.util.prefs.Preferences prefnode = rootprefs.node(prefkey.getClass().getPackage().getName());
-		String key = prefkey.name();
-		Class<?> type = value.getClass();
-
-		if (type == Boolean.class) {
-			prefnode.putBoolean(key, (Boolean)value);
+		if (value instanceof String) {
+			preferencesNode.put(key, value)
 		}
-		else if (type == Integer.class) {
-			prefnode.putInt(key, (Integer)value);
+		else if (value instanceof Boolean) {
+			preferencesNode.putBoolean(key, value)
 		}
-		else if (type == String.class) {
-			prefnode.put(key, (String)value);
+		else if (value instanceof Integer) {
+			preferencesNode.putInt(key, value)
 		}
-		else {
-			ByteArrayOutputStream objectbytes = new ByteArrayOutputStream();
-			new ObjectOutputStream(objectbytes).writeObject(value);
-			prefnode.putByteArray(key, objectbytes.toByteArray());
+		else if (value instanceof byte[]) {
+			def bytes = new ByteArrayOutputStream()
+			new ObjectOutputStream(bytes).writeObject(value)
+			preferencesNode.putByteArray(key, bytes.toByteArray())
 		}
-	}
-
-	/**
-	 * Sets a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @param value	  The value to associate with the key.
-	 */
-	void set(PreferencesKey prefkey, String value) {
-
-		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
-	}
-
-	/**
-	 * Sets a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @param value	  The value to associate with the key.
-	 */
-	void setBoolean(PreferencesKey prefkey, boolean value) {
-
-		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
-	}
-
-	/**
-	 * Sets a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @param value	  The value to associate with the key.
-	 */
-	void setInt(PreferencesKey prefkey, int value) {
-
-		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
-	}
-
-	/**
-	 * Sets a preference value.
-	 * 
-	 * @param prefkey Preferences key, an instance of {@link UserPreferencesKey}
-	 * 				  or {@link SystemPreferencesKey}.
-	 * @param value	  The value to associate with the key.
-	 */
-	void setObject(PreferencesKey prefkey, Object value) {
-
-		set(prefkey instanceof UserPreferencesKey ? userpreferences : systempreferences, prefkey, value);
 	}
 }

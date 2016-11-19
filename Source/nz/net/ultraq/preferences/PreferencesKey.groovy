@@ -31,7 +31,7 @@ interface PreferencesKey {
 	 * 
 	 * @return Default setting value.
 	 */
-	Object defaultValue();
+	Object defaultValue()
 
 	/**
 	 * Returns the name of the setting/parameter to retrieve.  The Java {@code enum}
@@ -40,5 +40,5 @@ interface PreferencesKey {
 	 * 
 	 * @return <tt>String</tt> of the key used to map the setting to.
 	 */
-	String name();
+	String name()
 }

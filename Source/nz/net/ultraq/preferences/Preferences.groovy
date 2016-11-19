@@ -59,6 +59,7 @@ class Preferences {
 	 * @return The value of the preference, or the default value if it hasn't been
 	 *         overidden with another value.
 	 */
+	@SuppressWarnings('UnnecessaryPublicModifier') // Needed for the parser to understand the generic type
 	public <T> T get(PreferencesKey preferencesKey) {
 
 		def preferencesNode =
@@ -83,7 +84,7 @@ class Preferences {
 			}
 		}
 
-		return value;
+		return value
 	}
 
 	/**

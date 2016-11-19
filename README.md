@@ -62,11 +62,12 @@ public class MyClass {
 
 	public static void main(String[] args) {
 
-		int windowWidth = Preferences.getInt(MyPreferences.WINDOW_WIDTH);
-		int windowHeight = Preferences.getInt(MyPreferences.WINDOW_HEIGHT);
+		Preferences preferences = new Preferences();
 
-		Preferences.setInt(MyPreferences.WINDOW_WIDTH, 1024);
-		Preferences.flush();
+		int windowWidth = preferences.get(MyPreferences.WINDOW_WIDTH);
+		int windowHeight = preferences.get(MyPreferences.WINDOW_HEIGHT);
+
+		preferences.set(MyPreferences.WINDOW_WIDTH, 1024);
 	}
 }
 ```

@@ -42,6 +42,8 @@ enum TestSystemPreferences implements SystemPreferencesKey {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	@SuppressWarnings('ConfusingMethodName')
 	Object defaultValue() {
 
 		return defaultValue

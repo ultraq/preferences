@@ -47,7 +47,7 @@ class PreferencesTests {
 	void clearPreferences() {
 
 		preferences.clear()
-		java.util.prefs.Preferences.systemRoot().flush()
+		java.util.prefs.Preferences.userRoot().flush()
 	}
 
 	/**
@@ -58,12 +58,12 @@ class PreferencesTests {
 
 		// Change then clear a value
 		def newValue = 'goodbye'
-		preferences.set(TestSystemPreferences.TEST_STRING, newValue)
-		preferences.clear(TestSystemPreferences.TEST_STRING)
+		preferences.set(TestUserPreferences.TEST_STRING, newValue)
+		preferences.clear(TestUserPreferences.TEST_STRING)
 
 		// Assert cleared
-		def value = preferences.get(TestSystemPreferences.TEST_STRING)
-		assert value == TestSystemPreferences.TEST_STRING.defaultValue()
+		def value = preferences.get(TestUserPreferences.TEST_STRING)
+		assert value == TestUserPreferences.TEST_STRING.defaultValue()
 	}
 
 	/**
@@ -72,9 +72,9 @@ class PreferencesTests {
 	@Test
 	void getDefaultPreference() {
 
-		def value = preferences.get(TestSystemPreferences.TEST_STRING)
+		def value = preferences.get(TestUserPreferences.TEST_STRING)
 
-		assert value == TestSystemPreferences.TEST_STRING.defaultValue()
+		assert value == TestUserPreferences.TEST_STRING.defaultValue()
 	}
 
 	/**
@@ -85,8 +85,8 @@ class PreferencesTests {
 
 		def newValue = 'goodbye'
 
-		preferences.set(TestSystemPreferences.TEST_STRING, newValue)
-		def value = preferences.get(TestSystemPreferences.TEST_STRING)
+		preferences.set(TestUserPreferences.TEST_STRING, newValue)
+		def value = preferences.get(TestUserPreferences.TEST_STRING)
 
 		assert value == newValue
 	}

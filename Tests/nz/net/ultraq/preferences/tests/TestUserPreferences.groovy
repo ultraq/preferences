@@ -23,7 +23,7 @@ import nz.net.ultraq.preferences.SystemPreferencesKey
  * 
  * @author Emanuel Rabina
  */
-enum TestSystemPreferences implements SystemPreferencesKey {
+enum TestUserPreferences implements SystemPreferencesKey {
 
 	TEST_STRING ('hello')
 
@@ -34,7 +34,7 @@ enum TestSystemPreferences implements SystemPreferencesKey {
 	 * 
 	 * @param defaultValue
 	 */
-	TestSystemPreferences(Object defaultValue) {
+	TestUserPreferences(Object defaultValue) {
 
 		this.defaultValue = defaultValue
 	}

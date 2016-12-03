@@ -28,7 +28,7 @@ project.sourceCompatibility = '1.8'
 
 project.group    = 'nz.net.ultraq.preferences'
 project.artifact = 'preferences'
-project.version  = '2.0.0-SNAPSHOT'
+project.version  = '2.0.0'
 project.year     = '2007'
 
 dependencies {

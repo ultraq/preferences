@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-apply plugin: 'groovy'
-apply plugin: 'codenarc'
-apply plugin: 'maven'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/1.3.1/gradle-support.gradle'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/1.3.1/maven-support.gradle'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/1.3.1/bundle.gradle'
+plugins {
+	id 'groovy'
+	id 'codenarc'
+	id 'maven'
+}
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.0.0/gradle-support.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.0.0/maven-support.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.0.0/bundle.gradle'
 
 //project.name        = 'Preferences'
 project.description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
@@ -33,14 +35,17 @@ project.year     = '2007'
 
 dependencies {
 	compile(
-		'org.codehaus.groovy:groovy:2.4.7'
+		'org.codehaus.groovy:groovy:2.4.12'
 	)
 	testCompile(
 		'junit:junit:4.12'
 	)
+	testRuntime(
+		'org.slf4j:slf4j-api:1.7.10'
+	)
 }
 
 codenarc {
-	configFile = file('.codenarc.groovy')
-	toolVersion = '0.25.2'
+	def sharedConfig = 'https://raw.githubusercontent.com/ultraq/codenarc-config-ultraq/master/codenarc.groovy'.toURL().text
+	config = resources.text.fromString(sharedConfig)
 }

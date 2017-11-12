@@ -75,7 +75,7 @@ class Preferences {
 	 *         overidden with another value.
 	 */
 	@SuppressWarnings('UnnecessaryPublicModifier') // Needed for the parser to understand the generic type
-	public <T> T get(PreferencesKey preferencesKey) {
+	<T> T get(PreferencesKey preferencesKey) {
 
 		def preferencesNode =
 			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)

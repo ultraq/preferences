@@ -19,10 +19,12 @@ Installation
 Minimum of Java 8 required.
 
 ### Standalone distribution
+
 Copy the JAR from [the latest release bundle](https://github.com/ultraq/preferences/releases/latest),
 or build the project from the source code here on GitHub.
 
 ### For Maven and Maven-compatible dependency managers
+
 Add a dependency to your project with the following co-ordinates:
 
  - GroupId: `nz.net.ultraq.preferences`
@@ -76,3 +78,22 @@ I usually use this library in-conjunction with my [Preferences - XML](https://gi
 project, which will write user/system preferences to an XML file in a
 subdirectory of your project, rather than using the default implementation
 which, on Windows, uses the registry as the backing store.
+
+
+API
+---
+
+### clear([PreferencesKey preference])
+
+Clears a stored preference, allowing future calls for the preference to revert
+to its default value.  If called without any arguments, this method clears all
+preferences.
+
+### get(PreferencesKey preference)
+
+Returns the value of the preference, or the default value if it hasn't been
+overidden with another value.
+
+### set(PreferencesKey preference, Object value)
+
+Sets the value of a preference.

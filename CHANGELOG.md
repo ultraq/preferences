@@ -2,6 +2,9 @@
 Changelog
 =========
 
+### 2.1.0
+ - Updated build scripts and moved to GitHub Actions from Travis CI.
+
 ### 2.0.0
  - Project rewritten in Groovy
  - Minimum Java version upped to 8

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package nz.net.ultraq.preferences.tests
-
-import nz.net.ultraq.preferences.SystemPreferencesKey
+package nz.net.ultraq.preferences
 
 import groovy.transform.TupleConstructor
 
@@ -28,7 +26,10 @@ import groovy.transform.TupleConstructor
 @TupleConstructor
 enum TestUserPreferences implements SystemPreferencesKey {
 
-	TEST_STRING ('hello')
+	TEST_STRING_GET('hey'),
+	TEST_STRING_SET('hi'),
+	TEST_STRING_CLEAR('hello'),
+	TEST_STRING_DEFAULT('goodbye')
 
 	final String defaultValue
 }

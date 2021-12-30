@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package nz.net.ultraq.preferences.tests
+package nz.net.ultraq.preferences
 
-import nz.net.ultraq.preferences.Preferences
+import static TestUserPreferences.*
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,13 +47,12 @@ class PreferencesTests {
 	void clearPreference() {
 
 		// Change then clear a value
-		def newValue = 'goodbye'
-		preferences.set(TestUserPreferences.TEST_STRING, newValue)
-		preferences.clear(TestUserPreferences.TEST_STRING)
+		preferences.set(TEST_STRING_CLEAR, 'something else')
+		preferences.clear(TEST_STRING_CLEAR)
 
 		// Assert cleared
-		def value = preferences.get(TestUserPreferences.TEST_STRING)
-		assert value == TestUserPreferences.TEST_STRING.defaultValue
+		def result = preferences.get(TEST_STRING_CLEAR)
+		assert result == TEST_STRING_CLEAR.defaultValue
 	}
 
 	/**
@@ -62,9 +61,8 @@ class PreferencesTests {
 	@Test
 	void getDefaultPreference() {
 
-		def value = preferences.get(TestUserPreferences.TEST_STRING)
-
-		assert value == TestUserPreferences.TEST_STRING.defaultValue
+		def result = preferences.get(TEST_STRING_DEFAULT)
+		assert result == TEST_STRING_DEFAULT.defaultValue
 	}
 
 	/**
@@ -74,10 +72,9 @@ class PreferencesTests {
 	void getPreference() {
 
 		def newValue = 'goodbye'
+		preferences.set(TEST_STRING_GET, newValue)
 
-		preferences.set(TestUserPreferences.TEST_STRING, newValue)
-		def value = preferences.get(TestUserPreferences.TEST_STRING)
-
-		assert value == newValue
+		def result = preferences.get(TEST_STRING_GET)
+		assert result == newValue
 	}
 }

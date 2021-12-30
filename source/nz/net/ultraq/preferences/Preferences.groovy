@@ -26,9 +26,6 @@ package nz.net.ultraq.preferences
  */
 class Preferences {
 
-	private final java.util.prefs.Preferences systemPreferences = java.util.prefs.Preferences.systemRoot()
-	private final java.util.prefs.Preferences userPreferences   = java.util.prefs.Preferences.userRoot()
-
 	/**
 	 * Clears <em>all</em> preferences.
 	 */
@@ -40,21 +37,22 @@ class Preferences {
 				root.node(childName).clear()
 			}
 		}
-		clearRootAndChildren(systemPreferences)
-		clearRootAndChildren(userPreferences)
+		clearRootAndChildren(java.util.prefs.Preferences.userRoot())
+		clearRootAndChildren(java.util.prefs.Preferences.systemRoot())
 	}
 
 	/**
 	 * Clears a stored preference, allowing future calls for the preference to
 	 * revert to its default value.
 	 * 
-	 * @param preferencesKey Key to have it's value cleared.
+	 * @param preferencesKey
+	 *   Key to have it's value cleared.
 	 */
 	void clear(PreferencesKey preferencesKey) {
 
-		def preferencesNode =
-			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
-				.node(preferencesKey.class.package.name)
+		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
+			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
+			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
 		preferencesNode.remove(preferencesKey.name())
 	}
 
@@ -63,25 +61,26 @@ class Preferences {
 	 */
 	protected void finalize() {
 
-		userPreferences.flush()
-		systemPreferences.flush()
+		java.util.prefs.Preferences.userRoot().flush()
+		java.util.prefs.Preferences.systemRoot().flush()
 	}
 
 	/**
 	 * Returns the value for the given preference.
 	 * 
-	 * @param preferencesKey Preferences key.
-	 * @return The value of the preference, or the default value if it hasn't been
-	 *         overidden with another value.
+	 * @param preferencesKey
+	 *   Preferences key.
+	 * @return
+	 *   The value of the preference, or the default value if it hasn't been
+	 *   overidden with another value.
 	 */
-	@SuppressWarnings('UnnecessaryPublicModifier') // Needed for the parser to understand the generic type
-	<T> T get(PreferencesKey preferencesKey) {
+	public <T> T get(PreferencesKey preferencesKey) {
 
-		def preferencesNode =
-			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
-			.node(preferencesKey.class.package.name)
+		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
+			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
+			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
 		def key = preferencesKey.name()
-		def value = preferencesKey.defaultValue()
+		def value = preferencesKey.defaultValue
 
 		if (value instanceof String) {
 			value = preferencesNode.get(key, value)
@@ -99,20 +98,22 @@ class Preferences {
 			}
 		}
 
-		return value
+		return (T)value
 	}
 
 	/**
 	 * Sets a value for the given preference.
 	 * 
-	 * @param preferencesKey Preferences key.
-	 * @param value          The value to associate with the key.
+	 * @param preferencesKey
+	 *   Preferences key.
+	 * @param value
+	 *   The value to associate with the key.
 	 */
 	void set(PreferencesKey preferencesKey, Object value) {
 
-		def preferencesNode =
-			(preferencesKey instanceof UserPreferencesKey ? userPreferences : systemPreferences)
-			.node(preferencesKey.class.package.name)
+		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
+			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
+			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
 		def key = preferencesKey.name()
 
 		if (value instanceof String) {

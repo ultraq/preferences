@@ -18,9 +18,8 @@ package nz.net.ultraq.preferences.tests
 
 import nz.net.ultraq.preferences.Preferences
 
-import org.junit.After
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 /**
  * Test suite for the alternate Preferences API.
@@ -29,25 +28,16 @@ import org.junit.Test
  */
 class PreferencesTests {
 
-	private static Preferences preferences
+	private Preferences preferences
 
 	/**
-	 * Create preferences instance to use for tests.
+	 * Create a fresh preferences instance to use for tests.
 	 */
-	@BeforeClass
-	static void setupPreferences() {
+	@BeforeEach
+	void setupPreferences() {
 
 		preferences = new Preferences()
-	}
-
-	/**
-	 * Reset the preferences after each test.
-	 */
-	@After
-	void clearPreferences() {
-
 		preferences.clear()
-		java.util.prefs.Preferences.userRoot().flush()
 	}
 
 	/**
@@ -63,7 +53,7 @@ class PreferencesTests {
 
 		// Assert cleared
 		def value = preferences.get(TestUserPreferences.TEST_STRING)
-		assert value == TestUserPreferences.TEST_STRING.defaultValue()
+		assert value == TestUserPreferences.TEST_STRING.defaultValue
 	}
 
 	/**
@@ -74,7 +64,7 @@ class PreferencesTests {
 
 		def value = preferences.get(TestUserPreferences.TEST_STRING)
 
-		assert value == TestUserPreferences.TEST_STRING.defaultValue()
+		assert value == TestUserPreferences.TEST_STRING.defaultValue
 	}
 
 	/**

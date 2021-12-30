@@ -18,34 +18,17 @@ package nz.net.ultraq.preferences.tests
 
 import nz.net.ultraq.preferences.SystemPreferencesKey
 
+import groovy.transform.TupleConstructor
+
 /**
  * A set of system preferences for testing.
  * 
  * @author Emanuel Rabina
  */
+@TupleConstructor
 enum TestUserPreferences implements SystemPreferencesKey {
 
 	TEST_STRING ('hello')
 
-	private final Object defaultValue
-
-	/**
-	 * Constructor, sets the default value.
-	 * 
-	 * @param defaultValue
-	 */
-	TestUserPreferences(Object defaultValue) {
-
-		this.defaultValue = defaultValue
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@SuppressWarnings('ConfusingMethodName')
-	Object defaultValue() {
-
-		return defaultValue
-	}
+	final String defaultValue
 }

@@ -30,8 +30,21 @@ interface PreferencesKey {
 	 * exist in the settings file.
 	 * 
 	 * @return Default setting value.
+	 * @deprecated Replaced by <tt>getDefaultValue</tt>
 	 */
-	Object defaultValue()
+	@Deprecated
+	default Object defaultValue() {
+
+		return getDefaultValue()
+	}
+
+	/**
+	 * Returns the default setting value to use if the setting key does not
+	 * exist in the settings file.
+	 *
+	 * @return Default setting value.
+	 */
+	Object getDefaultValue()
 
 	/**
 	 * Returns the name of the setting/parameter to retrieve.  The Java {@code enum}

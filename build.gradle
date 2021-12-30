@@ -15,32 +15,34 @@
  */
 
 plugins {
+	id 'java-library'
 	id 'groovy'
-	id 'codenarc'
-	id 'maven'
+	id 'jacoco'
+	id 'com.github.kt3k.coveralls' version '2.12.0'
+	id 'distribution'
+	id 'maven-publish'
 }
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.1.0/gradle-support.gradle'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.1.0/maven-support.gradle'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/2.1.0/bundle.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/gradle-support.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/maven-publish-support.gradle'
 
-//project.name        = 'Preferences'
-project.description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
-project.archivesBaseName = 'preferences'
-project.sourceCompatibility = '1.8'
-
-project.group    = 'nz.net.ultraq.preferences'
-project.artifact = 'preferences'
-project.version  = '2.0.0'
-project.year     = '2007'
+description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
+version = '2.1.0-SNAPSHOT'
+sourceCompatibility = '1.8'
+group = 'nz.net.ultraq.preferences'
+year = '2007'
 
 dependencies {
-	compile(
-		'org.codehaus.groovy:groovy:2.4.12'
+	api(
+		'org.codehaus.groovy:groovy:3.0.9'
 	)
-	testCompile(
+	testImplementation(
 		'junit:junit:4.12'
 	)
-	testRuntime(
+	testRuntimeOnly(
 		'org.slf4j:slf4j-api:1.7.10'
 	)
+}
+
+compileGroovy {
+	groovyOptions.optimizationOptions.indy = true
 }

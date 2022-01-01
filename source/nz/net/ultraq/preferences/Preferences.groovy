@@ -50,9 +50,7 @@ class Preferences {
 	 */
 	void clear(PreferencesKey preferencesKey) {
 
-		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
-			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
-			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
+		def preferencesNode = getPreferencesForType(preferencesKey)
 		preferencesNode.remove(preferencesKey.name())
 	}
 
@@ -76,9 +74,7 @@ class Preferences {
 	 */
 	public <T> T get(PreferencesKey preferencesKey) {
 
-		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
-			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
-			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
+		def preferencesNode = getPreferencesForType(preferencesKey)
 		def key = preferencesKey.name()
 		def value = preferencesKey.defaultValue
 
@@ -102,6 +98,19 @@ class Preferences {
 	}
 
 	/**
+	 * Return the appropriate preferences node for the given key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private static java.util.prefs.Preferences getPreferencesForType(PreferencesKey key) {
+
+		return key instanceof SystemPreferencesKey ?
+			java.util.prefs.Preferences.systemNodeForPackage(key.class) :
+			java.util.prefs.Preferences.userNodeForPackage(key.class)
+	}
+
+	/**
 	 * Sets a value for the given preference.
 	 * 
 	 * @param preferencesKey
@@ -111,9 +120,7 @@ class Preferences {
 	 */
 	void set(PreferencesKey preferencesKey, Object value) {
 
-		def preferencesNode = preferencesKey instanceof UserPreferencesKey ?
-			java.util.prefs.Preferences.userNodeForPackage(preferencesKey.class) :
-			java.util.prefs.Preferences.systemNodeForPackage(preferencesKey.class)
+		def preferencesNode = getPreferencesForType(preferencesKey)
 		def key = preferencesKey.name()
 
 		if (value instanceof String) {

@@ -67,6 +67,7 @@ class Preferences {
 	 */
 	protected void finalize() {
 
+		// TODO: Replace with a java.lang.ref.Cleaner if Java 8 support is dropped
 		java.util.prefs.Preferences.userRoot().flush()
 		java.util.prefs.Preferences.systemRoot().flush()
 	}

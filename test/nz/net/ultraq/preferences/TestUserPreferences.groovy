@@ -24,7 +24,7 @@ import groovy.transform.TupleConstructor
  * @author Emanuel Rabina
  */
 @TupleConstructor
-enum TestUserPreferences implements SystemPreferencesKey {
+enum TestUserPreferences implements UserPreferencesKey {
 
 	TEST_STRING_GET('hey'),
 	TEST_STRING_SET('hi'),

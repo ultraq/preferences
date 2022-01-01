@@ -16,6 +16,8 @@
 
 package nz.net.ultraq.preferences
 
+import java.util.prefs.BackingStoreException
+
 /**
  * Alternate entrypoint to the Preferences API.
  * <p>
@@ -38,7 +40,13 @@ class Preferences {
 			}
 		}
 		clearRootAndChildren(java.util.prefs.Preferences.userRoot())
-		clearRootAndChildren(java.util.prefs.Preferences.systemRoot())
+
+		try {
+			clearRootAndChildren(java.util.prefs.Preferences.systemRoot())
+		}
+		catch (BackingStoreException ignored) {
+			// BackingStoreException thrown if lacking permissions on Windows
+		}
 	}
 
 	/**

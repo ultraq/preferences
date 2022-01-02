@@ -39,7 +39,7 @@ use those enum values over an instance of `nz.net.ultraq.preferences.Preferences
 to load/save the relevant preferences.  eg:
 
 ```java
-public enum MyPreferences implements UserPreferencesKey {
+public enum MyPreferences implements UserPreference {
 
   WINDOW_WIDTH  (800),
   WINDOW_HEIGHT (600);
@@ -51,7 +51,7 @@ public enum MyPreferences implements UserPreferencesKey {
   }
 
   @Override
-  public Object defaultValue() {
+  public Object getDefaultValue() {
     return defaultValue;
   }
 }
@@ -80,11 +80,11 @@ Clears a stored preference, allowing future calls for the preference to revert
 to its default value.  If called without any arguments, this method clears all
 preferences.
 
-### get(PreferencesKey preference)
+### get(Preference preference)
 
 Returns the value of the preference, or the default value if it hasn't been
 overidden with another value.
 
-### set(PreferencesKey preference, Object value)
+### set(Preference preference, Object value)
 
 Sets the value of a preference.

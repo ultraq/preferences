@@ -17,9 +17,9 @@
 package nz.net.ultraq.preferences
 
 /**
- * User-specific preferences key.
+ * Marker interface for user preferences.
  * 
  * @author Emanuel Rabina
  */
-interface SystemPreferencesKey extends PreferencesKey {
+interface UserPreference extends Preference {
 }

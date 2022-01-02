@@ -2,11 +2,12 @@
 Changelog
 =========
 
-### 2.1.0
+### 3.0.0
  - Updated build scripts and moved to GitHub Actions from Travis CI.
- - Added `getDefaultValue()` as a replacement for `defaultValue()` to align with
-   Javabean convention and work better with Groovy and other code-generation
-   tools.
+ - Renamed `defaultValue()` -> `getDefaultValue()` to align with Javabean
+ - conventions and work better with Groovy and other code-generation tools.
+ - Renamed `UserPreferencesKey` -> `UserPreference`.
+ - Renamed `SystemPreferencesKey` -> `SystemPreference`.
 
 ### 2.0.0
  - Project rewritten in Groovy

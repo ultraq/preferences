@@ -1,5 +1,5 @@
 /* 
- * Copyright 2016, Emanuel Rabina (http://www.ultraq.net.nz/)
+ * Copyright 2007, Emanuel Rabina (http://www.ultraq.net.nz/)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,11 @@
 
 package nz.net.ultraq.preferences
 
-import groovy.transform.TupleConstructor
-
 /**
- * A set of system preferences for testing.
+ * Marker interface for system preferences.  Note that using system preferences
+ * might require elevated privileges, depending on the platform being used.
  * 
  * @author Emanuel Rabina
  */
-@TupleConstructor
-enum TestUserPreferences implements UserPreferencesKey {
-
-	TEST_STRING_GET('hey'),
-	TEST_STRING_SET('hi'),
-	TEST_STRING_CLEAR('hello'),
-	TEST_STRING_DEFAULT('goodbye')
-
-	final String defaultValue
+interface SystemPreference extends Preference {
 }

@@ -23,33 +23,18 @@ package nz.net.ultraq.preferences
  * 
  * @author Emanuel Rabina
  */
-interface PreferencesKey {
+interface Preference {
 
 	/**
-	 * Returns the default setting value to use if the setting key does not
-	 * exist in the settings file.
+	 * Returns the default value to use if the preference has no value yet.
 	 * 
-	 * @return Default setting value.
-	 * @deprecated Replaced by <tt>getDefaultValue</tt>
-	 */
-	@Deprecated
-	default Object defaultValue() {
-
-		return getDefaultValue()
-	}
-
-	/**
-	 * Returns the default setting value to use if the setting key does not
-	 * exist in the settings file.
-	 *
-	 * @return Default setting value.
+	 * @return Default value.
 	 */
 	Object getDefaultValue()
 
 	/**
-	 * Returns the name of the setting/parameter to retrieve.  The Java {@code enum}
-	 * type already has this method, so implementations won't need to do anything
-	 * for this method.
+	 * Returns the name of the preference.  The Java {@code enum} type already has
+	 * this method, so implementations won't need to do anything for this method.
 	 * 
 	 * @return <tt>String</tt> of the key used to map the setting to.
 	 */

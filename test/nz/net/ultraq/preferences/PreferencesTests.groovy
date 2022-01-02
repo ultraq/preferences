@@ -16,7 +16,7 @@
 
 package nz.net.ultraq.preferences
 
-import static TestUserPreferences.*
+import static TestPreferences.*
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

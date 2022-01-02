@@ -56,7 +56,7 @@ class Preferences {
 	 * @param preferencesKey
 	 *   Key to have it's value cleared.
 	 */
-	void clear(PreferencesKey preferencesKey) {
+	void clear(Preference preferencesKey) {
 
 		def preferencesNode = getPreferencesForType(preferencesKey)
 		preferencesNode.remove(preferencesKey.name())
@@ -81,7 +81,7 @@ class Preferences {
 	 *   The value of the preference, or the default value if it hasn't been
 	 *   overidden with another value.
 	 */
-	public <T> T get(PreferencesKey preferencesKey) {
+	public <T> T get(Preference preferencesKey) {
 
 		def preferencesNode = getPreferencesForType(preferencesKey)
 		def key = preferencesKey.name()
@@ -112,9 +112,9 @@ class Preferences {
 	 * @param key
 	 * @return
 	 */
-	private static java.util.prefs.Preferences getPreferencesForType(PreferencesKey key) {
+	private static java.util.prefs.Preferences getPreferencesForType(Preference key) {
 
-		return key instanceof SystemPreferencesKey ?
+		return key instanceof SystemPreference ?
 			java.util.prefs.Preferences.systemNodeForPackage(key.class) :
 			java.util.prefs.Preferences.userNodeForPackage(key.class)
 	}
@@ -127,7 +127,7 @@ class Preferences {
 	 * @param value
 	 *   The value to associate with the key.
 	 */
-	void set(PreferencesKey preferencesKey, Object value) {
+	void set(Preference preferencesKey, Object value) {
 
 		def preferencesNode = getPreferencesForType(preferencesKey)
 		def key = preferencesKey.name()

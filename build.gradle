@@ -26,7 +26,7 @@ apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/gradl
 apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/maven-publish-support.gradle'
 
 description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
-version = '3.0.0-SNAPSHOT'
+version = '3.0.0'
 sourceCompatibility = '1.8'
 group = 'nz.net.ultraq.preferences'
 year = '2007'

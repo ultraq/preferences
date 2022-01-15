@@ -5,7 +5,7 @@ Changelog
 ### 3.0.0
  - Updated build scripts and moved to GitHub Actions from Travis CI.
  - Renamed `defaultValue()` -> `getDefaultValue()` to align with Javabean
- - conventions and work better with Groovy and other code-generation tools.
+   conventions and work better with Groovy and other code-generation tools.
  - Renamed `UserPreferencesKey` -> `UserPreference`.
  - Renamed `SystemPreferencesKey` -> `SystemPreference`.
 

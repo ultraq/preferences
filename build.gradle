@@ -26,25 +26,21 @@ apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/gradl
 apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/maven-publish-support.gradle'
 
 description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
-version = '3.0.0'
+version = '3.1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 group = 'nz.net.ultraq.preferences'
 year = '2007'
 
 dependencies {
 	api(
-		'org.codehaus.groovy:groovy:3.0.9'
+		'org.apache.groovy:groovy:4.0.0'
 	)
 	testImplementation(
 		'org.junit.jupiter:junit-jupiter:5.8.2'
 	)
 	testRuntimeOnly(
-		'org.slf4j:slf4j-api:1.7.32'
+		'org.slf4j:slf4j-api:1.7.33'
 	)
-}
-
-compileGroovy {
-	groovyOptions.optimizationOptions.indy = true
 }
 
 test {

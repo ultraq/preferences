@@ -3,7 +3,7 @@ Preferences
 ===========
 
 [![Build Status](https://github.com/ultraq/preferences/actions/workflows/build.yml/badge.svg)](https://github.com/ultraq/preferences/actions)
-[![Coverage Status](https://coveralls.io/repos/github/ultraq/preferences/badge.svg?branch=main)](https://coveralls.io/github/ultraq/preferences?branch=main)
+[![codecov](https://codecov.io/gh/ultraq/preferences/branch/main/graph/badge.svg?token=hAt037wG33)](https://codecov.io/gh/ultraq/preferences)
 [![Maven Central](https://img.shields.io/maven-central/v/nz.net.ultraq.preferences/preferences.svg?maxAge=3600)](http://search.maven.org/#search|ga|1|g%3A%22nz.net.ultraq.preferences%22%20AND%20a%3A%22preferences%22)
 
 A simplified and typesafe entry point to the Java Preferences API (`java.util.prefs`).

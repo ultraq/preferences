@@ -2,6 +2,11 @@
 Changelog
 =========
 
+### 3.1.0
+- Upgraded Groovy to 4.0.0
+- The `javadoc` artifact in Maven downloads now includes this project's
+  groovydocs, which have been missing thus far
+
 ### 3.0.0
  - Updated build scripts and moved to GitHub Actions from Travis CI.
  - Renamed `defaultValue()` -> `getDefaultValue()` to align with Javabean

@@ -23,7 +23,7 @@ Add a dependency to your project with the following co-ordinates:
 
  - GroupId: `nz.net.ultraq.preferences`
  - ArtifactId: `preferences`
- - Version: (as per the badges above)
+ - Version: `3.1.0`
 
 Check the [project releases](https://github.com/ultraq/preferences/releases)
 for a list of available versions.  Each release page also includes a
@@ -74,17 +74,5 @@ public class MyClass {
 API
 ---
 
-### clear([PreferencesKey preference])
-
-Clears a stored preference, allowing future calls for the preference to revert
-to its default value.  If called without any arguments, this method clears all
-preferences.
-
-### get(Preference preference)
-
-Returns the value of the preference, or the default value if it hasn't been
-overidden with another value.
-
-### set(Preference preference, Object value)
-
-Sets the value of a preference.
+Browse the online groovydocs for this library here:
+https://javadoc.io/doc/nz.net.ultraq.preferences/preferences

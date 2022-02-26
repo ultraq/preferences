@@ -18,12 +18,11 @@ plugins {
 	id 'java-library'
 	id 'groovy'
 	id 'jacoco'
-	id 'com.github.kt3k.coveralls' version '2.12.0'
 	id 'distribution'
 	id 'maven-publish'
 }
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/gradle-support.gradle'
-apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.0/maven-publish-support.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.1/gradle-support.gradle'
+apply from: 'https://raw.githubusercontent.com/ultraq/gradle-support/4.0.1/maven-publish-support.gradle'
 
 description = 'A simplified and typesafe entry point to the Java Preferences API (java.util.prefs)'
 version = '3.1.0-SNAPSHOT'
@@ -32,15 +31,10 @@ group = 'nz.net.ultraq.preferences'
 year = '2007'
 
 dependencies {
-	api(
-		'org.apache.groovy:groovy:4.0.0'
-	)
-	testImplementation(
-		'org.junit.jupiter:junit-jupiter:5.8.2'
-	)
-	testRuntimeOnly(
-		'org.slf4j:slf4j-api:1.7.33'
-	)
+	api 'org.apache.groovy:groovy:4.0.0'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+	testRuntimeOnly 'org.slf4j:slf4j-api:1.7.36'
 }
 
 test {

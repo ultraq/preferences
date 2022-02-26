@@ -33,10 +33,10 @@ downloadable JAR if you want to manually add it to your project classpath.
 Usage
 -----
 
-Implement `enum`s that extend from `UserPreferencesKey` or
-`SystemPreferencesKey` to create user/system preferences respectively.  Then,
-use those enum values over an instance of `nz.net.ultraq.preferences.Preferences`
-to load/save the relevant preferences.  eg:
+Implement `enum`s that extend from `UserPreference` or `SystemPreference` to
+create user/system preferences respectively.  Then, use those enum values over
+an instance of `nz.net.ultraq.preferences.Preferences` to load/save the relevant
+preferences.  eg:
 
 ```java
 public enum MyPreferences implements UserPreference {
@@ -46,7 +46,7 @@ public enum MyPreferences implements UserPreference {
 
   public final Object defaultValue;
 
-  private MyPreferences(Object defaultValue) {
+  MyPreferences(Object defaultValue) {
     this.defaultValue = defaultValue;
   }
 
